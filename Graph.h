@@ -116,33 +116,43 @@ public:
 
 
 	//========================findShortestPath====================
+	// Finds the shortest path between all vertices in the graph.  
 	// 
-	// 
-	// Preconditions: 
+	// Preconditions: The graph is built.
 	//		
-	// Postconditions: 
+	// Postconditions: The shortest paths between all the vertices
+	//		   have been found. 
 	//============================================================ 
-	findShortestPath();
+	void findShortestPath();
 
 
 	//========================displayAll==========================
-	//
+	// Displays the entire graph. Prints out the vertices
+	// description, the edges associated with the vertices, and
+	// the edge weights. 
 	// 
-	// Preconditions: 
+	// Preconditions: The graph must have already built. 
 	//		
-	// Postconditions: 
+	// Postconditions: A detailed graph is desplayed showing all
+	//		   the vertices, the edges, and weights. 
 	//============================================================ 
-	displayAll();
+	void displayAll();
 
 
 	//========================display=============================
-	//
+	// Displays the path from the first int to the second int. 
+	// The ints represents vertices in the graph, so they must 
+	// exist. Prins out the vertices description, the edges 
+	// associated with the vertices, and the edge weights. 
 	// 
-	// Preconditions: 
+	// Preconditions: The provided vertices must exist.
 	//		
-	// Postconditions: 
+	// Postconditions: A detailed graph is displayed showing all
+	//		   the vertices, their description, the edges, 
+	//	       	   and weights. 
 	//============================================================ 
-	display(int, int);
+	void display(int, int);
+
 
 private:
 
