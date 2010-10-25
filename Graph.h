@@ -10,7 +10,7 @@
 // Date  : 2010/11/02
 // Class : CSS 343 - Lab 3
 //====================================================================
-// Binary class: 
+// Graph class: 
 //   Includes following features:
 // 	- allows building a graph. 
 //	- allows inserting an edge into the graph.
@@ -83,7 +83,7 @@ public:
 	// Postconditions: The graph is built using the data from 
 	//		   the provided stream.
 	//============================================================ 
-	buildGraph(ifstream &);
+	void buildGraph (ifstream &);
 
 
 	//========================insertEdge==========================
@@ -99,7 +99,7 @@ public:
 	// Postconditions: Returns true if the edge was inserted into
 	//	 	   the graph, false otherwise.
 	//============================================================ 
-	bool insertEdge(int, int, int);
+	bool insertEdge (int, int, int);
 
 
 	//========================removeEdge==========================
@@ -112,7 +112,7 @@ public:
 	// Postconditions: Returns true if the edge was removed, 	
 	//		   false otherwise.
 	//============================================================ 
-	bool removeEdge(int, int);
+	bool removeEdge (int, int);
 
 
 	//========================findShortestPath====================
@@ -123,7 +123,7 @@ public:
 	// Postconditions: The shortest paths between all the vertices
 	//		   have been found. 
 	//============================================================ 
-	void findShortestPath();
+	void findShortestPath ();
 
 
 	//========================displayAll==========================
@@ -136,7 +136,7 @@ public:
 	// Postconditions: A detailed graph is desplayed showing all
 	//		   the vertices, the edges, and weights. 
 	//============================================================ 
-	void displayAll();
+	void displayAll ();
 
 
 	//========================display=============================
@@ -151,7 +151,7 @@ public:
 	//		   the vertices, their description, the edges, 
 	//	       	   and weights. 
 	//============================================================ 
-	void display(int, int);
+	void display (int, int);
 
 
 private:
