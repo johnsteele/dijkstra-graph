@@ -73,24 +73,30 @@ Graph::~Graph ()
 
 
 //========================buildGraph==================================
-// Builds this graph using the provided ifstream. 
+// Builds this graph using the provided file ifstream. 
 //
 // The format of the stream should be as follows: 
 //	- The first line is the number of vertices.  
-//	- Flollowing is a text description of each vertex.  
+//	- Flollowing is a text description for each vertex.  
 //	  (One description per line, and 50 chars max lenght)
-//	- After that, each line has 3 ints rep. an edge. 
-//	- A zero for the first int signals end of data. 
+//	- After that, each line has 3 ints representing an edge.
+//	  (first int is from, second int is to, third int is weight) 
+//	- A zero for the first int of the three signals end of data. 
 // 
-// Preconditions: The input must be properly formatted, and be 
-//		  organize as described above. 
+// Preconditions: The input file stream should be open. It should be
+//		  properly formatted, and be organize as described 
+//		  above. 
 //		
 // Postconditions: The graph is built using the data from the provided
 //		   stream.
 //====================================================================
-void Graph::buildGraph (ifstream &the_input)
+void Graph::buildGraph (ifstream &the_infile)
 {
+	// Ensure file is open.
+	if (infile.is_open()) {
+			
 
+	}	
 }
 
 
