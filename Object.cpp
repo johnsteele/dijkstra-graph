@@ -30,7 +30,7 @@
 //====================================================================
 Object::Object (const char *the_desc)
 {
-
+	copy_data (my_desc, the_desc);
 }
 
 
@@ -46,7 +46,7 @@ Object::Object (const char *the_desc)
 //====================================================================
 Object::Object (const Object &the_other)
 {
-
+	copy_data (my_desc, the_other.my_desc);
 }
 
 
@@ -54,21 +54,28 @@ Object::Object (const Object &the_other)
 // Copies the data the data from the_val2 into the_val1.
 // 
 // Preconditions: The end of the_val2 is marked with a terminating 
-//		  character. 
+//		  '\0' character. 
 //		
 // Postconditions: the_val2 is copied into the_val1. 
 //==================================================================== 
 void Object::copy_data (char *the_val1, const char *the_val2) 
 {
+	// Stop when we reach '\0', or MAX_SIZE.
+	while ((*the_val1++ = *the_val2++) && 
+		(the_val1 != &my_desc [MAX_SIZE]));
 
+	// Terminate end of string.	
+	the_val1 = '\0';
 }
 
 
 //========================operator<<==================================
 // Overloaded operator<<.
+// Sends my_desc to the outupt stream and returns it.
 //====================================================================
 ostream& operator<< (ostream &the_output, const Object &the_object)
 {
+	the_output << my_desc;
 	return the_output;
 }
 
