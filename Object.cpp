@@ -40,7 +40,7 @@ Object::Object (const char *the_desc)
 // 
 // Preconditions: The end of the_other's description is marked with a
 //		  terminating character. 
-/		
+//		
 // Postconditions: This Object has been instanitiated with its 
 //		   description set to the_other's. 
 //====================================================================
@@ -65,7 +65,7 @@ void Object::copy_data (char *the_val1, const char *the_val2)
 		(the_val1 != &my_desc [MAX_SIZE]));
 
 	// Terminate end of string.	
-	the_val1 = '\0';
+	*the_val1 = '\0';
 }
 
 
