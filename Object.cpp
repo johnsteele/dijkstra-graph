@@ -75,7 +75,5 @@ void Object::copy_data (char *the_val1, const char *the_val2)
 //====================================================================
 ostream& operator<< (ostream &the_output, const Object &the_object)
 {
-	the_output << my_desc;
+	the_output << the_object.my_desc;
 	return the_output;
-}
-
