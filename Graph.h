@@ -159,34 +159,53 @@ public:
 
 private:
 
-	// Use 101 as maximum, if you don't use vertex 0
+	// Maximum number of vertices allowed in a graph. 
 	static const int MAX_VERTICES = 100;
 
-	struct EdgeNode {			// can change to a class, if desired
-		int adjVertex;			// subscript of the adjacent vertex 
-		int weight;			// weight of edge
-		EdgeNode *nextEdge;
+
+	// A struct to represent an edge in the graph.
+	struct EdgeNode {		
+		// The subscript of the adjacent vertex. 
+		int adjVertex;     	
+		// The weight of the edge. 
+		int weight;      
+		// A link to the next edge.
+  		EdgeNode *nextEdge;
 	};
 
+
+	// A struct to represent a vertex in the graph. 
 	struct VertexNode {
-		EdgeNode *edgeHead;		// head of the list of edges
-		Object *data;			// store vertex data here
+		// The head of the list of edges.
+		EdgeNode *edgeHead;		
+		// The vertex data.
+		Object *data;			
 	};
 
-	// array of VertexNodes
-	VertexNode vertices[MAX_VERTICES];
 
-	// table of information for Dijkstra's algorithm
+	// The array of VertexNodes in this graph.
+	VertexNode my_vertices[MAX_VERTICES];
+
+
+	// A table to store information for Dijkstra's algorithm
 	struct Table {
-		bool visited;			// whether vertex has been visited
-		int dist;			// shortest known distance from source
-		int path;			// previous vertex in path of min dist
+		// A flag to mark if the  vertex has been visited.
+		bool visited;	
+		// The shortest known distance from source vertex.
+		int distance;
+		// The previous vertex of the path of minimum 
+		// distance.	
+		int prev_vertex;
 	};
-		
-	int size;				// number of vertices in the graph
-    	Table T[MAX_VERTICES][MAX_VERTICES];	// stores visited, distance, path -
-						// two dimensional in order to solve
-						// for all sources
+
+
+	// The number of vertices in this graph.
+	int my_size;				
+	
+	// The table that stores: visited, distance, and path. 
+	// It's two dimensional in order to solve shortest path 	
+	// for all vertices in the graph.
+    	Table my_table [MAX_VERTICES][MAX_VERTICES];	
 };
 #endif /* _GRAPH_H */
 
