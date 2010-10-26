@@ -25,6 +25,7 @@ class Object {
 
 	//========================operator<<==========================
 	// Overloaded operator<<.
+	// Sends my_desc to the output stream and returns it.
 	//============================================================ 
 	friend ostream& operator<< (ostream &, const Object &);
 
@@ -72,8 +73,8 @@ private:
 	// The max size of the description.
 	static const int MAX_SIZE = 50;
 
-	// The Object description.
-	char my_desc [MAX_SIZE];
+	// The Object description. +1 for terminating character.
+	char my_desc [MAX_SIZE + 1];
 };
 #endif /* _OBJECT_H */
 
