@@ -24,10 +24,14 @@
 //	- each line following the description contains three ints
 //	  representing an edge. 
 //	- a zero for the first integer signals the end of the data. 
-//====================================================================
+//==================================================================== 
 
 #ifndef _GRAPH_H
 #define _GRAPH_H
+#include <iostream>  
+using namespace std;
+
+
 
 class Graph {   
                          
