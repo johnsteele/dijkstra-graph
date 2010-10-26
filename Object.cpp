@@ -77,3 +77,5 @@ ostream& operator<< (ostream &the_output, const Object &the_object)
 {
 	the_output << the_object.my_desc;
 	return the_output;
+}
+
