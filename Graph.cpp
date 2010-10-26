@@ -93,7 +93,7 @@ Graph::~Graph ()
 void Graph::buildGraph (ifstream &the_infile)
 {
 	// Ensure file is open.
-	if (infile.is_open()) {
+	if (the_infile.is_open()) {
 			
 
 	}	
