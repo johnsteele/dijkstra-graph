@@ -164,7 +164,7 @@ bool Graph::insertEdge (int the_from_v, int the_to_v, int the_weight)
 {
 	EdgeNode *edge_node, *cur;
 
-	// Ensure vertexes are within range, and non negative weight.
+	// Ensure vertices are within range, and non negative weight.
 	if (the_from_v < 1 || the_from_v > my_size || 
 		the_to_v < 1 || the_to_v > my_size || 
 			the_weight < 0) return false;		
@@ -194,7 +194,7 @@ bool Graph::insertEdge (int the_from_v, int the_to_v, int the_weight)
 			cur = cur->nextEdge;	
 		}
 	
-		// Link it in as our new head.
+		// Not a duplicate, so link it in as our new head.
 		edge_node->nextEdge = my_vertices [the_from_v].edgeHead;
 		my_vertices [the_from_v].edgeHead = edge_node;
 	} 
@@ -214,7 +214,26 @@ bool Graph::insertEdge (int the_from_v, int the_to_v, int the_weight)
 //==================================================================== 
 bool Graph::removeEdge (int the_from_v, int the_to_v) 
 {
+	EdgeNode *cur, *prev;
 
+	// Ensure vertices are within range.
+	if (the_from_v < 1 || the_from_v > my_size || 
+		the_to_v < 1 || the_to_v > my_size) return false;		
+
+	cur = prev = my_vertices [the_from_v].edgeHead; 	
+	
+	if (cur != NULL) {
+		if (cur->adjVertex == the_to_v) {
+			// We found the edge, link prev to next.
+			prev->nextEdge = cur->nextEdge;	
+			delete cur;	
+			cur->nextEdge = NULL;
+			return true;			
+		}	
+		prev = cur;
+		cur  = cur->nextEdge;	
+	} 
+	return false;
 }
 
 
