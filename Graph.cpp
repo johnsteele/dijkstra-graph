@@ -162,7 +162,7 @@ void Graph::buildGraph (ifstream &infile)
 //==================================================================== 
 bool Graph::insertEdge (int the_from_v, int the_to_v, int the_weight)
 {
-	EdgeNode *edge_node;
+	EdgeNode *edge_node, *cur;
 
 	// Ensure vertexes are within range, and non negative weight.
 	if (the_from_v < 1 || the_from_v > my_size || 
@@ -175,13 +175,25 @@ bool Graph::insertEdge (int the_from_v, int the_to_v, int the_weight)
 	edge_node->adjVertex = the_to_v;
 
 	// Is it the first edge being added.
-	if (my_vertices [the_from_v].edgeHead == NULL) {
+	if (my_vertices [the_from_v].edgeHead == NULL) { 
 		// Link it in as our head.
 		edge_node->nextEdge = NULL;
 		my_vertices [the_from_v].edgeHead = edge_node;
 	}
 	
 	else {
+		// First check for a duplicate.
+		cur = my_vertices [the_from_v].edgeHead;
+		while (cur != NULL) {
+		 	if (cur->adjVertex == the_to_v) {
+				// We have a duplicate, update weight. 
+				cur->weight = the_weight;	
+				delete edge_node;
+				return true;		
+			} 	
+			cur = cur->nextEdge;	
+		}
+	
 		// Link it in as our new head.
 		edge_node->nextEdge = my_vertices [the_from_v].edgeHead;
 		my_vertices [the_from_v].edgeHead = edge_node;
