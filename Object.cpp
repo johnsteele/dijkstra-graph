@@ -19,22 +19,23 @@
 #include "Object.h" 
 
 //========================Constructor=================================
-// Creates a Object with its description set to the description in the
-// provided pointer.  
+// Creates a Object with an empty description.
 // 
-// Preconditions: The end of the string that is passed is marked with
-// 		  a terminating character.
+// Preconditions: None. 
 //		
 // Postconditions: This Object has been instanitiated with its 
-// 		   description set to the_desc.  
+// 		   description initialized to empty.
 //====================================================================
-Object::Object (const char *the_desc)
+Object::Object ()
 {
-	copy_data (my_desc, the_desc);
+	// Initialize description array.
+	int i;
+	for (i = 0; i < MAX_SIZE; i++) 
+		my_desc [i] = '\0';	
 }
 
 
-//========================Copy-Constructor============================
+//=======================Copy-Constructor============================
 // Creates a Object with its description set to the_other's 
 // description.
 // 
@@ -67,6 +68,23 @@ void Object::copy_data (char *the_val1, const char *the_val2)
 	// Terminate end of string.	
 	*the_val1 = '\0';
 }
+
+
+//========================setData=====================================
+// Sets this Object's description to the line of characters extracted
+// from the infile stream. If the description is longer than 
+// MAX_SIZE the trailing data will be omitted. 
+// 
+// Preconditions: The give ifstream is open. 
+//		
+// Postconditions: my_desc is set to the first MAX_SIZE of chars in 
+//		   the infile.
+//====================================================================
+void Object::setData (ifstream &infile)
+{
+	if (infile.is_open()) 
+		infile.getline (my_desc, MAX_SIZE + 1);	
+}	
 
 
 //========================operator<<==================================

@@ -25,7 +25,7 @@ using namespace std;
 //                  are used.  Should compile, run to completion, and output  
 //                  correct answers if the classes are implemented correctly.
 int main() {
-   ifstream infile1("HW3.txt");
+/*   ifstream infile1("HW3.txt");
    if (!infile1) {
       cerr << "File could not be opened." << endl;
       return 1;
@@ -41,8 +41,10 @@ int main() {
       G.displayAll();              // display shortest distance, path to cout
       G.display(3,2);              // display path from vertex 3 to 2 to cout
    }
-
-   return 0;
+*/
+	Graph graph1;
+		
+	return 0;
 }
 
 

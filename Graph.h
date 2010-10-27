@@ -30,6 +30,8 @@
 #define _GRAPH_H
 #include "Object.h" // Vertex data.
 #include <iostream>  
+#include <fstream>
+#include <limits.h>
 using namespace std;
 
 class Graph {   
@@ -159,6 +161,18 @@ public:
 
 private:
 
+	//========================init_table==========================
+	// Initializes the table of shortes paths.
+	// 	1.) Sets visited to false.
+	//	2.) Sets the initial distance to INT_MAX.
+	//	3.) Sets previous vertex to zero.
+	// 
+	// Preconditions: None.
+	//		
+	// Postconditions: The table has been initialized.
+	//============================================================ 
+	void init_table ();
+
 	// Maximum number of vertices allowed in a graph. 
 	static const int MAX_VERTICES = 100;
 
@@ -184,13 +198,16 @@ private:
 
 
 	// The array of VertexNodes in this graph.
-	VertexNode my_vertices[MAX_VERTICES];
+	VertexNode my_vertices [MAX_VERTICES];
+
+	// The number of vertices in this graph.
+	int my_size;				
 
 
 	// A table to store information for Dijkstra's algorithm
 	struct Table {
 		// A flag to mark if the  vertex has been visited.
-		bool visited;	
+		bool isVisited;	
 		// The shortest known distance from source vertex.
 		int distance;
 		// The previous vertex of the path of minimum 
@@ -198,10 +215,6 @@ private:
 		int prev_vertex;
 	};
 
-
-	// The number of vertices in this graph.
-	int my_size;				
-	
 	// The table that stores: visited, distance, and path. 
 	// It's two dimensional in order to solve shortest path 	
 	// for all vertices in the graph.

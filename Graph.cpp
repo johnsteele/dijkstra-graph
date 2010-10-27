@@ -38,8 +38,11 @@
 //    		   default values. 
 //====================================================================
 Graph::Graph ()
-{
-
+{	
+	// Initialie the table. 
+	init_table (); 
+	// Start with zero vertices in the graph.
+	my_size = 0;	
 }
 
 
@@ -55,7 +58,7 @@ Graph::Graph ()
 //====================================================================
 Graph::Graph (const Graph &the_other)
 {
-
+	
 }
 
 
@@ -68,7 +71,30 @@ Graph::Graph (const Graph &the_other)
 //====================================================================
 Graph::~Graph ()
 {
+	
+}
 
+
+//========================init_table==================================
+// Initializes the table of shortes paths.
+// 	1.) Sets visited to false.
+//	2.) Sets the initial distance to INT_MAX.
+//	3.) Sets previous vertex to zero.
+// 
+// Preconditions: None.
+//		
+// Postconditions: The table has been initialized.
+//====================================================================
+void Graph::init_table ()
+{
+	int row, col;
+	for (row = 0; row < MAX_VERTICES; row++) {
+		for (col = 0; col < MAX_VERTICES; col++) {
+			my_table [row][col].isVisited   = false;
+			my_table [row][col].distance    = INT_MAX;
+			my_table [row][col].prev_vertex = 0;
+		}
+	}
 }
 
 
@@ -78,7 +104,7 @@ Graph::~Graph ()
 // The format of the stream should be as follows: 
 //	- The first line is the number of vertices.  
 //	- Flollowing is a text description for each vertex.  
-//	  (One description per line, and 50 chars max lenght)
+//	  (One description per line, and 50 chars max length)
 //	- After that, each line has 3 ints representing an edge.
 //	  (first int is from, second int is to, third int is weight) 
 //	- A zero for the first int of the three signals end of data. 
@@ -90,12 +116,34 @@ Graph::~Graph ()
 // Postconditions: The graph is built using the data from the provided
 //		   stream.
 //====================================================================
-void Graph::buildGraph (ifstream &the_infile)
+void Graph::buildGraph (ifstream &infile)
 {
-	// Ensure file is open.
-	if (the_infile.is_open()) {
-			
+	int cur, src, dest, cost;	
+	Object     *vertex_data;
 
+	// GET SIZE 
+	infile >> my_size;	
+
+	if (infile.eof()) return;
+	infile.ignore(); // Throw away '\n'.			
+
+	// GET VERTEX DESCRIPTION
+	for (cur = 0; cur < my_size; cur++) { 
+		vertex_data = new Object ();
+		vertex_data->setData (infile);
+
+		// SET VERTEX DATA.  
+		my_vertices [cur].data = vertex_data;
+		my_vertices [cur].edgeHead = NULL; 
+		my_size++;			
+	}	
+
+	// FILL COST EDGE ARRAY	
+	src = dest = cost = 1;
+	for (;;) {
+		infile >> src >> dest >> cost;
+		if (src == 0 || infile.eof()) break;
+		insertEdge (src, dest, cost);	
 	}	
 }
 
@@ -114,7 +162,31 @@ void Graph::buildGraph (ifstream &the_infile)
 //==================================================================== 
 bool Graph::insertEdge (int the_from_v, int the_to_v, int the_weight)
 {
+	EdgeNode *edge_node;
 
+	// Ensure vertexes are within range, and non negative weight.
+	if (the_from_v < 1 || the_from_v > my_size || 
+		the_to_v < 1 || the_to_v > my_size || 
+			the_weight < 0) return false;		
+
+	// Setup the new edge.
+	edge_node            = new EdgeNode;
+	edge_node->weight    = the_weight;
+	edge_node->adjVertex = the_to_v;
+
+	// Is it the first edge being added.
+	if (my_vertices [the_from_v].edgeHead == NULL) {
+		// Link it in as our head.
+		edge_node->nextEdge = NULL;
+		my_vertices [the_from_v].edgeHead = edge_node;
+	}
+	
+	else {
+		// Link it in as our new head.
+		edge_node->nextEdge = my_vertices [the_from_v].edgeHead;
+		my_vertices [the_from_v].edgeHead = edge_node;
+	} 
+	return true;
 }
 
 

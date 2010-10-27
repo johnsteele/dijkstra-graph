@@ -19,6 +19,7 @@
 #ifndef _OBJECT_H
 #define _OBJECT_H
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 class Object {
@@ -32,16 +33,14 @@ class Object {
 public: 
 
 	//========================Constructor=========================
-	// Creates a Object with its description set to the 
-	// description in the provided pointer.  
+	// Creates a Object with an empty description.
 	// 
-	// Preconditions: The end of the string that is passed is 
-	//		  marked with a terminating character.
+	// Preconditions: None. 
 	//		
-	// Postconditions: This Object has been instanitiated with
-	//		   its description set to the_desc.  
-	//============================================================ 
-	Object (const char *);
+	// Postconditions: This Object has been instanitiated with its 
+	// 		   description initialized to empty.
+	//============================================================
+	Object ();
 
 
 	//========================Copy-Constructor====================
@@ -56,6 +55,18 @@ public:
 	//============================================================ 
 	Object (const Object &);
 
+
+	//========================setData=============================
+	// Sets this Object's description to the line of characters
+	// extracted from the infile stream. If the description is 
+	// longer than MAX_SIZE the trailing data will be omitted. 
+	// 
+	// Preconditions: The give ifstream is open. 
+	//		
+	// Postconditions: my_desc is set to the first MAX_SIZE of 
+	//	 	   chars in the infile.
+	//============================================================ 
+	void setData (ifstream &);	
 
 private:
 
