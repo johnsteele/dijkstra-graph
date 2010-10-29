@@ -88,7 +88,7 @@ Graph::~Graph ()
 void Graph::init_table ()
 {
 	int row, col;
-	for (row = 0; row < MAX_VERTICES; row++) {
+	for (row = 1; row <= MAX_VERTICES; row++) {
 		for (col = 0; col < MAX_VERTICES; col++) {
 			my_table [row][col].isVisited   = false;
 			my_table [row][col].distance    = INT_MAX;
@@ -128,7 +128,7 @@ void Graph::buildGraph (ifstream &infile)
 	infile.ignore(); // Throw away '\n'.			
 
 	// GET VERTEX DESCRIPTION
-	for (cur = 0; cur < my_size; cur++) { 
+	for (cur = 1; cur <= my_size; cur++) { 
 		vertex_data = new Object ();
 		vertex_data->setData (infile);
 
@@ -247,7 +247,79 @@ bool Graph::removeEdge (int the_from_v, int the_to_v)
 //==================================================================== 
 void Graph::findShortestPath ()
 {
+	run_dijkstra (1);
+}
 
+
+//========================run_dijkstra================================
+// Finds the shortest path for each of the vertices in the graph to
+// all the other vertices.
+// 
+// Preconditions: The graph is built and init_table is needed
+//		  to initialize the table
+// 		  		
+// Postconditions: The shortest paths for each of the vertices
+//		   in the graph have been found.
+//==================================================================== 
+void Graph::run_dijkstra (int the_source) 
+{
+	// Used for traversing vertex edges.
+	EdgeNode *edge;
+
+	// The current vertex, and current distance.
+	int vertex, distance;
+
+	// The weight of the current edge.
+	int weight; 
+
+	// A queue for 
+	queue<int> Q;
+
+	// Initialize the table.
+	init_table();
+
+	// Distance from source to source is zero.
+	my_table [the_source][the_source].distance   = 0;
+	my_table [the_source][the_source].isVisited  = true;
+	my_table [the_source][the_source].prev_vertex = the_source;
+
+
+	// We need to somehow get the vertex from this queue.
+	// But the queue is really used for gettin the smallest distance. 
+	Q.push (my_table[the_source][the_source].distance);
+	
+	while (!Q.empty()) {
+		// Right now I'm getting the shortest distance, not the vertex.
+		// I need to be able to get the vertex associated with the 
+		// shortest distance. hmmmm... 	
+		vertex = Q.front();
+		Q.pop();
+
+		// The vertex shortest distance has been found.
+		my_table[the_source][vertex].isVisited = true;
+
+		// Get the first edge of the vertex.
+		edge = my_vertices[the_source].edgeHead;	
+
+		while (edge) {	
+			
+			// If the shortest path to the vertex this edge goes to 
+			// is not already found. 							
+			if (!my_table[the_source][vertex].isVisited) {
+				// Get the weight of the edge. 	
+				weight = edge->weight;
+ 
+				distance = weight + my_table[the_source][vertex].distance;
+			
+				// If the new distance is shorter, update it.	
+				if (distance < my_table[the_source][vertex].distance) {
+					my_table[the_source][vertex].distance = distance;
+					my_table[the_source][vertex].prev_vertex = vertex;
+				}	
+			} 
+			edge = edge->nextEdge;
+		} // end while(edge) 
+	} // end while (!Q.empty())	
 }
 
 
@@ -262,7 +334,7 @@ void Graph::findShortestPath ()
 //==================================================================== 
 void Graph::displayAll ()
 {
-
+	
 }
 
 

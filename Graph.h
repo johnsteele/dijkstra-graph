@@ -31,6 +31,7 @@
 #include "Object.h" // Vertex data.
 #include <iostream>  
 #include <fstream>
+#include <queue>
 #include <limits.h>
 using namespace std;
 
@@ -161,20 +162,8 @@ public:
 
 private:
 
-	//========================init_table==========================
-	// Initializes the table of shortes paths.
-	// 	1.) Sets visited to false.
-	//	2.) Sets the initial distance to INT_MAX.
-	//	3.) Sets previous vertex to zero.
-	// 
-	// Preconditions: None.
-	//		
-	// Postconditions: The table has been initialized.
-	//============================================================ 
-	void init_table ();
-
 	// Maximum number of vertices allowed in a graph. 
-	static const int MAX_VERTICES = 100;
+	static const int MAX_VERTICES = 101; // Not using index 0.
 
 
 	// A struct to represent an edge in the graph.
@@ -210,8 +199,7 @@ private:
 		bool isVisited;	
 		// The shortest known distance from source vertex.
 		int distance;
-		// The previous vertex of the path of minimum 
-		// distance.	
+		// The previous vertex in optimal path from source.
 		int prev_vertex;
 	};
 
@@ -219,6 +207,32 @@ private:
 	// It's two dimensional in order to solve shortest path 	
 	// for all vertices in the graph.
     	Table my_table [MAX_VERTICES][MAX_VERTICES];	
+
+
+	//========================init_table==========================
+	// Initializes the table of shortes paths.
+	// 	1.) Sets visited to false.
+	//	2.) Sets the initial distance to INT_MAX.
+	//	3.) Sets previous vertex to zero.
+	// 
+	// Preconditions: None.
+	//		
+	// Postconditions: The table has been initialized.
+	//============================================================ 
+	void init_table ();
+
+
+	//========================run_dijkstra========================
+	// Finds the shortest path for each of the vertices in the 
+	// graph to all the other vertices.
+	// 
+	// Preconditions: The graph is built and init_table is needed
+	//		  to initialize the table
+	// 		  		
+	// Postconditions: The shortest paths for each of the vertices
+	//		   in the graph have been found.
+	//============================================================ 
+	void run_dijkstra (int);
 };
 #endif /* _GRAPH_H */
 
