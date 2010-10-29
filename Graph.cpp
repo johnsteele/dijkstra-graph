@@ -279,8 +279,8 @@ void Graph::run_dijkstra (int the_source)
 	init_table();
 
 	// Distance from source to source is zero.
-	my_table [the_source][the_source].distance   = 0;
-	my_table [the_source][the_source].isVisited  = true;
+	my_table [the_source][the_source].distance    = 0;
+	my_table [the_source][the_source].isVisited   = true;
 	my_table [the_source][the_source].prev_vertex = the_source;
 
 
@@ -292,31 +292,42 @@ void Graph::run_dijkstra (int the_source)
 		// Right now I'm getting the shortest distance, not the vertex.
 		// I need to be able to get the vertex associated with the 
 		// shortest distance. hmmmm... 	
-		vertex = Q.front();
-		Q.pop();
+		vertex = Q.front(); // find the vertex w/ shortest path.
+		Q.pop();	  
 
 		// The vertex shortest distance has been found.
 		my_table[the_source][vertex].isVisited = true;
 
 		// Get the first edge of the vertex.
-		edge = my_vertices[the_source].edgeHead;	
+		edge = my_vertices[vertex].edgeHead;	
 
 		while (edge) {	
 			
-			// If the shortest path to the vertex this edge goes to 
-			// is not already found. 							
-			if (!my_table[the_source][vertex].isVisited) {
+			// If the shortest path to the adjacent vertex hasn't been found. 	
+			if (!my_table[the_source][edge->adjVertex].isVisited) {
+
 				// Get the weight of the edge. 	
 				weight = edge->weight;
- 
-				distance = weight + my_table[the_source][vertex].distance;
-			
-				// If the new distance is shorter, update it.	
-				if (distance < my_table[the_source][vertex].distance) {
-					my_table[the_source][vertex].distance = distance;
-					my_table[the_source][vertex].prev_vertex = vertex;
-				}	
+	
+				// If this is the fist time adding a distance to this vertex.	
+				if (my_table[the_source][edge->adjVertex].distance == INT_MAX) {
+					my_table[the_source][adge->adjVertex].distance = 
+						weight + my_table[the_source][vertex].distance;
+						// It's shortest path has been updated.
+						my_table[the_source][edge->adjVertex].prev_vertex = vertex;
+				}
+				
+				else { // Otherwise, get the distance and compare it to its' current.
+					distance = weight + my_table[the_source][vertex].distance;
+					// If the new distance is shorter than the current, update it.	
+					if (distance < my_table[the_source][edge->adjVertex].distance) {
+						my_table[the_source][edge->adjVertex].distance = distance;
+						// It's shortest path has been updated.
+						my_table[the_source][edge->adjVertex].prev_vertex = vertex;
+					}
+				} 
 			} 
+			// Now move to the next edge. 
 			edge = edge->nextEdge;
 		} // end while(edge) 
 	} // end while (!Q.empty())	
