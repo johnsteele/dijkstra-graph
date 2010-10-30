@@ -212,7 +212,7 @@ private:
 	//========================init_table==========================
 	// Initializes the table of shortes paths.
 	// 	1.) Sets visited to false.
-	//	2.) Sets the initial distance to INT_MAX.
+	//	2.) Sets the initial distance to -1.
 	//	3.) Sets previous vertex to zero.
 	// 
 	// Preconditions: None.
@@ -227,12 +227,31 @@ private:
 	// graph to all the other vertices.
 	// 
 	// Preconditions: The graph is built and init_table is needed
-	//		  to initialize the table
+	//		  to initialize the table.
 	// 		  		
 	// Postconditions: The shortest paths for each of the vertices
 	//		   in the graph have been found.
 	//============================================================ 
 	void run_dijkstra (int);
+
+
+	//========================find_and_vist_minimum===============
+	// Finds and returns the vertex with the minimum distance from
+	// the vertices that have not yet been visited within my_table
+	//
+	// It then marks the returned vertex as being visisted.
+	//
+	// Preconditions:  my_table needs to have all vertices that 
+	//		   have not been visisted set to false. 	
+	// 		   The distance of each vertex in my_table 
+	//		   need to be set to -1 if a distance has 
+	//		   not yet been assigned.
+	//		    	  		  		
+	// Postconditions: Returns the vertex with the shortest
+	//		   distance from the vertex that has not yet
+	//		   been visited.
+	//============================================================ 
+	int find_and_visit_minimum (int);
 };
 #endif /* _GRAPH_H */
 

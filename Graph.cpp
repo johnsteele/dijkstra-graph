@@ -78,7 +78,7 @@ Graph::~Graph ()
 //========================init_table==================================
 // Initializes the table of shortes paths.
 // 	1.) Sets visited to false.
-//	2.) Sets the initial distance to INT_MAX.
+//	2.) Sets the initial distance to -1.
 //	3.) Sets previous vertex to zero.
 // 
 // Preconditions: None.
@@ -91,7 +91,7 @@ void Graph::init_table ()
 	for (row = 1; row <= MAX_VERTICES; row++) {
 		for (col = 0; col < MAX_VERTICES; col++) {
 			my_table [row][col].isVisited   = false;
-			my_table [row][col].distance    = INT_MAX;
+			my_table [row][col].distance    = -1;
 			my_table [row][col].prev_vertex = 0;
 		}
 	}
@@ -266,12 +266,11 @@ void Graph::run_dijkstra (int the_source)
 	// Used for traversing vertex edges.
 	EdgeNode *edge;
 
-	// The current vertex, and current distance.
-	int vertex, distance;
-
-	// The weight of the current edge.
-	int weight; 
-
+	// The current vertex, current distance, and edge weight .
+	int vertex, distance, weight; 
+	int count;
+	count = my_size;
+ 
 	// A queue for 
 	queue<int> Q;
 
@@ -280,23 +279,13 @@ void Graph::run_dijkstra (int the_source)
 
 	// Distance from source to source is zero.
 	my_table [the_source][the_source].distance    = 0;
-	my_table [the_source][the_source].isVisited   = true;
-	my_table [the_source][the_source].prev_vertex = the_source;
+	my_table [the_source][the_source].prev_vertex = the_source; 
 
 
-	// We need to somehow get the vertex from this queue.
-	// But the queue is really used for gettin the smallest distance. 
-	Q.push (my_table[the_source][the_source].distance);
-	
-	while (!Q.empty()) {
-		// Right now I'm getting the shortest distance, not the vertex.
-		// I need to be able to get the vertex associated with the 
-		// shortest distance. hmmmm... 	
-		vertex = Q.front(); // find the vertex w/ shortest path.
-		Q.pop();	  
-
-		// The vertex shortest distance has been found.
-		my_table[the_source][vertex].isVisited = true;
+	while (cout > 0) {
+		// Get the vertex associated with the shortest distance. 	
+		vertex = find_and_visit_minimum (the_source);
+		if (vertex == -1) break;		
 
 		// Get the first edge of the vertex.
 		edge = my_vertices[vertex].edgeHead;	
@@ -310,11 +299,13 @@ void Graph::run_dijkstra (int the_source)
 				weight = edge->weight;
 	
 				// If this is the fist time adding a distance to this vertex.	
-				if (my_table[the_source][edge->adjVertex].distance == INT_MAX) {
-					my_table[the_source][adge->adjVertex].distance = 
+				if (my_table[the_source][edge->adjVertex].distance == -1) {
+					my_table[the_source][edge->adjVertex].distance = 
 						weight + my_table[the_source][vertex].distance;
 						// It's shortest path has been updated.
 						my_table[the_source][edge->adjVertex].prev_vertex = vertex;
+						// Add it to the queue.
+						//Q.push (my_table[the_source][edge->adjVertex].distance);
 				}
 				
 				else { // Otherwise, get the distance and compare it to its' current.
@@ -325,12 +316,58 @@ void Graph::run_dijkstra (int the_source)
 						// It's shortest path has been updated.
 						my_table[the_source][edge->adjVertex].prev_vertex = vertex;
 					}
+					// It should already be on the queue.
 				} 
 			} 
 			// Now move to the next edge. 
 			edge = edge->nextEdge;
 		} // end while(edge) 
-	} // end while (!Q.empty())	
+		count--;
+	} // end while (count > 0)	
+}
+
+
+//========================find_and_vist_minimum=======================
+// Finds and returns the vertex with the minimum distance from the 
+// vertices that have not yet been visited within my_table
+//
+// It then marks the returned vertex as being visisted.
+//
+// Preconditions:  my_table needs to have all vertices that have not
+//		   been visisted set to false. The distance of each 
+//		   vertex in my_table need to be set to -1 if a
+//		   distance has not yet been assigned. the_source
+//		   needs to be a valid index of my_table.
+//		    	  		  		
+// Postconditions: Returns the vertex with the shortest distance 
+//		   from the vertex that has not yet been visited.
+//==================================================================== 
+int Graph::find_and_visit_minimum (int the_source)
+{
+	int i;
+	int distance;
+	int vertex;
+	vertex   = 0;
+	distance = INT_MAX;
+
+	for (i = 1; i <= my_size; i++) {
+		// If it's not visited, and has a distance already 
+		// assigned, and its distance is shorter than 
+		// the current distance we have stored.
+		if (!my_table[the_source][i].isVisited && 
+		    my_table[the_source][i].distance != -1 &&
+		    my_table[the_source][i].distance < distance) {
+			distance = my_table[the_source][i].distance;
+			vertex = i;
+		}
+	}
+
+	if (vertex == 0) {
+		return -1;
+	}  else  {
+		my_table[the_source][vertex].isVisited = true; 
+		return vertex; 
+	}
 }
 
 
