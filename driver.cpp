@@ -25,25 +25,25 @@ using namespace std;
 //                  are used.  Should compile, run to completion, and output  
 //                  correct answers if the classes are implemented correctly.
 int main() {
-/*   ifstream infile1("HW3.txt");
+   ifstream infile1("HW3.txt");
    if (!infile1) {
       cerr << "File could not be opened." << endl;
       return 1;
    }
 
    //for each graph, find the shortest path from every vertex to all other vertices
-   for(;;){
+ //  for(;;){
       Graph G;
       G.buildGraph(infile1);
-      if (infile1.eof()) 
-         break;
-      G.findShortestPath();        
+   //   if (infile1.eof()) 
+    //     break;
+//      G.findShortestPath();        
       G.displayAll();              // display shortest distance, path to cout
-      G.display(3,2);              // display path from vertex 3 to 2 to cout
-   }
-*/
-	Graph graph1;
-		
+//      G.display(3,2);              // display path from vertex 3 to 2 to cout
+  // }
+
+//	Graph graph1;
+
 	return 0;
 }
 

@@ -37,13 +37,7 @@
 // Postconditions: this Graph object is instantiated with 
 //    		   default values. 
 //====================================================================
-Graph::Graph ()
-{	
-	// Initialie the table. 
-	init_table (); 
-	// Start with zero vertices in the graph.
-	my_size = 0;	
-}
+Graph::Graph (){}
 
 
 //========================Copy-Constructor============================
@@ -87,9 +81,9 @@ Graph::~Graph ()
 //====================================================================
 void Graph::init_table ()
 {
-	int row, col;
+	int row, col; 
 	for (row = 1; row <= MAX_VERTICES; row++) {
-		for (col = 0; col < MAX_VERTICES; col++) {
+		for (col = 1; col <= MAX_VERTICES; col++) {
 			my_table [row][col].isVisited   = false;
 			my_table [row][col].distance    = -1;
 			my_table [row][col].prev_vertex = 0;
@@ -121,10 +115,10 @@ void Graph::buildGraph (ifstream &infile)
 	int cur, src, dest, cost;	
 	Object     *vertex_data;
 
+	if (infile.eof()) return;
+	
 	// GET SIZE 
 	infile >> my_size;	
-
-	if (infile.eof()) return;
 	infile.ignore(); // Throw away '\n'.			
 
 	// GET VERTEX DESCRIPTION
@@ -135,11 +129,9 @@ void Graph::buildGraph (ifstream &infile)
 		// SET VERTEX DATA.  
 		my_vertices [cur].data = vertex_data;
 		my_vertices [cur].edgeHead = NULL; 
-		my_size++;			
 	}	
 
 	// FILL COST EDGE ARRAY	
-	src = dest = cost = 1;
 	for (;;) {
 		infile >> src >> dest >> cost;
 		if (src == 0 || infile.eof()) break;
@@ -246,7 +238,8 @@ bool Graph::removeEdge (int the_from_v, int the_to_v)
 //		   been found. 
 //==================================================================== 
 void Graph::findShortestPath ()
-{
+{	
+	init_table ();
 	run_dijkstra (1);
 }
 
@@ -272,10 +265,10 @@ void Graph::run_dijkstra (int the_source)
 	count = my_size;
  
 	// A queue for 
-	queue<int> Q;
+	//queue<int> Q;
 
 	// Initialize the table.
-	init_table();
+	// init_table(the_source);
 
 	// Distance from source to source is zero.
 	my_table [the_source][the_source].distance    = 0;
@@ -382,7 +375,48 @@ int Graph::find_and_visit_minimum (int the_source)
 //==================================================================== 
 void Graph::displayAll ()
 {
+	int row, col;
+	//init_table();
+
+	// Display the boarder.
+	cout << setw(56) << setfill('-') << '|' << endl;
 	
+	// Display the table column headers. 
+	cout << setfill(' ') << "Description" << setw(15)
+	     << "From"     << setw(5)      << "To"          << setw(11) 
+	     << "Distance" << setw(7)      << "Path"        << endl;  
+
+	
+	// Go through each row of the table.
+	for (row = 1; row <= my_size; row++) { 
+
+		// Display vertex description. 
+		cout << *my_vertices [row].data << endl; 
+		
+		// Display the *from* vertex.
+		//cout << setw(23); << row;
+	
+		// Go through each column of the table. 
+		for (col = 1; col <= my_size; col++) {
+			if (col != row) {
+				// Display the *from* vertex.  
+				cout << setw(23) << row; 
+
+				// Display the *to* vertex.
+				cout << setw(7);
+				cout << col; 
+
+				// Display the distance.
+				cout << setw(5);	
+				cout << my_table[row][col].distance;
+		
+				// Display the path recursively.
+				cout << setw(11); 
+				display_helper(1, 1, col);
+			}			
+			cout << endl;	
+		} 
+	}	
 }
 
 
@@ -399,6 +433,26 @@ void Graph::displayAll ()
 //==================================================================== 
 void Graph::display(int the_start_v, int the_finish_v)
 {
-
+	// Print path from start to finish vertex.
+	display_helper (the_start_v, the_start_v, the_finish_v);
 } 
+
+	
+//========================display_helper==============================
+// A recursive helper method for displaying shortest paths.
+// 
+// Preconditions:  my_table is up to date. Otherwise the path might 
+//		   not print correctly. 
+// 		  		
+// Postconditions: The shortest path from the_source to the_last has
+//		   been printed to the output stream. 
+//==================================================================== 
+void Graph::display_helper (int the_source, int current, int the_last)
+{
+	// Base case.
+	if (current > the_last) return; 
+	display_helper (the_source, ++current, the_last); 
+	cout << my_table[the_source][current].prev_vertex;	
+}
+
 

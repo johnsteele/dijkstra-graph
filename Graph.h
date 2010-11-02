@@ -30,6 +30,7 @@
 #define _GRAPH_H
 #include "Object.h" // Vertex data.
 #include <iostream>  
+#include <iomanip>
 #include <fstream>
 #include <queue>
 #include <limits.h>
@@ -252,6 +253,20 @@ private:
 	//		   been visited.
 	//============================================================ 
 	int find_and_visit_minimum (int);
+
+
+	//========================display_helper======================
+	// A recursive helper method for displaying shortest paths.
+	// 
+	// Preconditions:  my_table is up to date. Otherwise the 
+	//		   path might not print correctly. 
+	// 		  		
+	// Postconditions: The shortest path from the_source to 
+	//		   the_last has been printed to the output
+	//		   stream. 
+	//============================================================ 
+	void display_helper (int, int, int);
+
 };
 #endif /* _GRAPH_H */
 
