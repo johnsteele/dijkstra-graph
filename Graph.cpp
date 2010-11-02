@@ -282,7 +282,7 @@ void Graph::run_dijkstra (int the_source)
 	my_table [the_source][the_source].prev_vertex = the_source; 
 
 
-	while (cout > 0) {
+	while (count > 0) {
 		// Get the vertex associated with the shortest distance. 	
 		vertex = find_and_visit_minimum (the_source);
 		if (vertex == -1) break;		
