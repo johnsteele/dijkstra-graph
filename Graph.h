@@ -98,6 +98,9 @@ public:
 	// not exceed the max of 100 edges. The first int is the from
 	// vertex, the second is the to vertex, and the third int is
 	// the weight of the edge. 
+	//
+	// If an edge is inserted, the findShortestPath method is ran
+	// to prevent a display of data that is not up to date.
 	// 
 	// Preconditions: The vertices must exist in the graph. Adding
 	//		  the edge must not exceed the max edges of 	
@@ -111,7 +114,10 @@ public:
 
 	//========================removeEdge==========================
 	// Removes an edge from the graph. The first provided int is
-	// the from vertex, and the second int is the to vertex. 
+	// the from vertex, and the second int is the to vertex.  
+	//		
+	// If an edge is removed, the findShortestPath method is ran
+	// to prevent a display of data that is not up to date.
 	// 
 	// Preconditions: The edge must exist. The from vertex and to
 	// 		  vertex must exist.

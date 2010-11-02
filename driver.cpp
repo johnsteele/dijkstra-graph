@@ -37,8 +37,9 @@ int main() {
       G.buildGraph(infile1);
    //   if (infile1.eof()) 
     //     break;
-//      G.findShortestPath();        
-      G.displayAll();              // display shortest distance, path to cout
+      G.findShortestPath();        
+      G.displayAll();
+      G.display(1, 4);              // display shortest distance, path to cout
 //      G.display(3,2);              // display path from vertex 3 to 2 to cout
   // }
 
