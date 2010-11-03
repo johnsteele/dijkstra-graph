@@ -273,6 +273,27 @@ private:
 	//============================================================ 
 	void display_helper (int, int, int);
 
+	//========================delete_vertices=====================
+	// A helper method for the deconstructor. It deletes all 
+	// dynamic memory within my_vertices.  
+	// 
+	// Preconditions: my_size is set to the number of vertices
+	//		  in the graph.
+	//		  		  		
+	// Postconditions: All dynamic memory has been deleted from 	
+	//		   my_vertices.
+	//============================================================ 
+	void delete_vertices (); 
+	
+	//========================print_vertices======================
+	// A helper method for displaying the descriptions of	
+	// vertices.
+	// 
+	// Preconditions: my_table is up to data.
+	//		  		  		
+	// Postconditions: The descriptions are printed to output.
+	//============================================================ 
+	void print_vertices (int, int, int); 
 };
 #endif /* _GRAPH_H */
 

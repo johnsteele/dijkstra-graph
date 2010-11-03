@@ -52,7 +52,61 @@ Graph::Graph (){}
 //====================================================================
 Graph::Graph (const Graph &the_other)
 {
+	int row, col;
+	EdgeNode *edge_cur;
+	EdgeNode *edge;
+	EdgeNode *current;
 	
+	// Copy the adjacency list.
+	for (row = 1; row <= the_other.my_size; row++) {
+		
+		// Copy the vertex description Object.
+		my_vertices[row].data = new Object (*the_other.my_vertices[row].data);
+		my_vertices[row].edgeHead = NULL;
+
+		// Get the head of the other list. 	
+		edge_cur = the_other.my_vertices[row].edgeHead;
+	
+		// Special case, copy the head.	
+		if (edge_cur) {
+			my_vertices[row].edgeHead            = new EdgeNode;
+			my_vertices[row].edgeHead->adjVertex = edge_cur->adjVertex;
+			my_vertices[row].edgeHead->weight    = edge_cur->weight;
+			my_vertices[row].edgeHead->nextEdge  = NULL;
+			current = my_vertices[row].edgeHead;
+			edge_cur = edge_cur->nextEdge;
+		}	
+
+		// Now do the normal traversal.	
+		while (edge_cur) {	
+			edge            = new EdgeNode;
+			edge->adjVertex = edge_cur->adjVertex;
+			edge->weight    = edge_cur->weight;
+			edge->nextEdge  = NULL; 
+	
+			// Link it in.
+			current->nextEdge = edge;	
+			// Move current to the new last edge.
+			current = current->nextEdge;
+			// Move to the next edge in the_other.
+			edge_cur = edge_cur->nextEdge;
+		}
+	}	
+
+	my_size = the_other.my_size;
+
+	init_table();
+	// Copy the table.	
+	for (row = 1; row <= my_size; row++) {
+		for (col = 1; col <= my_size; col++) {
+			my_table[row][col].isVisited =	
+				 the_other.my_table[row][col].isVisited;	
+			my_table[row][col].distance  =
+				 the_other.my_table[row][col].distance;
+			my_table[row][col].prev_vertex =
+				 the_other.my_table[row][col].prev_vertex;
+		}	
+	}	
 }
 
 
@@ -65,7 +119,44 @@ Graph::Graph (const Graph &the_other)
 //====================================================================
 Graph::~Graph ()
 {
+	delete_vertices();	
+}
+
+
+//========================delete_vertices=============================
+// A helper method for the deconstructor. It deletes all dynamic
+// memory within my_vertices.  
+// 
+// Preconditions: my_size is set to the number of vertices in the 
+//		  graph.
+//		  		  		
+// Postconditions: All dynamic memory has been deleted from 
+//		   my_vertices.
+//====================================================================
+void Graph::delete_vertices () 
+{
+	int row;
+	EdgeNode    *edge_cur;
+	EdgeNode    *junk;
 	
+	// Deallocate the adjacency list.
+	for (row = 1; row <= my_size; row++) {
+	
+		// Delete the vertex Object.
+		delete my_vertices[row].data;
+		my_vertices[row].data = NULL;
+
+		// Now go through the list.
+		edge_cur = my_vertices[row].edgeHead;
+		my_vertices[row].edgeHead = NULL;	
+
+		while (edge_cur != NULL) {
+			junk = edge_cur;
+			edge_cur = edge_cur->nextEdge; 
+			junk->nextEdge = NULL;
+			delete junk;			
+		} // end while (edge_cur != NULL) 
+	}	
 }
 
 
@@ -199,7 +290,7 @@ bool Graph::insertEdge (int the_from_v, int the_to_v, int the_weight)
 		
 	// We inserted into the graph, 
 	// now we have to update the table.
-	findShortesPath();
+	findShortestPath();
 	return true;
 }
 
@@ -227,19 +318,17 @@ bool Graph::removeEdge (int the_from_v, int the_to_v)
 		the_to_v < 1 || the_to_v > my_size) return false;		
 
 	cur = prev = my_vertices [the_from_v].edgeHead; 	
-	
-	if (cur != NULL) {
+	while (cur != NULL) {
 		if (cur->adjVertex == the_to_v) {
 			// We found the edge, link prev to next.
 			prev->nextEdge = cur->nextEdge;	
 			delete cur;	
 			cur->nextEdge = NULL;
-		
 			// We removed an edge, so we have to 
 			// update the table.
 			findShortestPath();
 			return true;			
-		}	
+		}
 		prev = cur;
 		cur  = cur->nextEdge;	
 	} 
@@ -395,7 +484,6 @@ void Graph::displayAll ()
 	cout << setfill(' ') << "Description" << setw(15)
 	     << "From"     << setw(5)      << "To"          << setw(11) 
 	     << "Distance" << setw(7)      << "Path"        << endl;  
-
 	
 	// Go through each row of the table.
 	for (row = 1; row <= my_size; row++) { 
@@ -412,18 +500,17 @@ void Graph::displayAll ()
 				// Display the *to* vertex.
 				cout << setw(7);
 				cout << col; 
-
+			
 				// Display the distance.
 				// First check if there is a path.
 				if (my_table[row][col].distance == -1) {
 					cout << setw(7);
 					cout << "--" << endl;		
 				} 
-				
+					
 				else {
 					cout << setw(7);
 					cout << my_table[row][col].distance;
-						
 					// Display the path recursively.
 					cout << setw(9); 
 					//display_helper(1, col, col);
@@ -473,6 +560,8 @@ void Graph::display(int the_start_v, int the_finish_v)
 	cout << setw(9); 
 	display_helper (the_start_v, the_finish_v, the_finish_v);
 	cout << endl;
+	print_vertices(the_start_v, the_finish_v, the_finish_v);
+	cout << endl;
 } 
 
 	
@@ -496,6 +585,27 @@ void Graph::display_helper (int the_source, int current, int the_last)
 	vertex = my_table[the_source][current].prev_vertex;
 	display_helper (the_source, vertex, the_last); 
 	cout << " " << current;
+}
+
+
+//========================print_vertices==============================
+// A helper method for displaying the descriptions of	
+// vertices.
+// 
+// Preconditions: my_table is up to data.
+//		  		  		
+// Postconditions: The descriptions are printed to output.
+//====================================================================
+void Graph::print_vertices (int the_source, int current, int the_last) {
+	int vertex; 
+	if (current == the_source) {
+		cout << *my_vertices[current].data;
+	 	return;
+	}
+	
+	vertex = my_table[the_source][current].prev_vertex;
+	print_vertices (the_source, vertex, the_last); 
+	cout << endl <<  *my_vertices[current].data;
 }
 
 

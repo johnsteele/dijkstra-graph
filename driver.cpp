@@ -32,18 +32,22 @@ int main() {
    }
 
    //for each graph, find the shortest path from every vertex to all other vertices
- //  for(;;){
+//   for(;;){
       Graph G;
       G.buildGraph(infile1);
-   //   if (infile1.eof()) 
-    //     break;
+      if (infile1.eof()) 
+ //       break;
       G.findShortestPath();        
-      G.displayAll();
-      G.display(1, 4);              // display shortest distance, path to cout
-//      G.display(3,2);              // display path from vertex 3 to 2 to cout
+//	G.removeEdge (1, 2);
+//	G.insertEdg(1, 4, 2);
+
+      G.displayAll();              // display shortest distance, path to cout
+      G.display(2,3);              // display path from vertex 3 to 2 to cout
+//	Graph G2 (G);
+//	G2.displayAll();	
+	//G.displayAll();
   // }
 
-//	Graph graph1;
 
 	return 0;
 }
